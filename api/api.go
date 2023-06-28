@@ -4,14 +4,15 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"github.com/bitly/go-simplejson"
-	"github.com/go-resty/resty/v2"
 	"log"
 	"math/rand"
 	"myoss/mylog"
 	"myoss/utils"
 	"strconv"
 	"time"
+
+	"github.com/bitly/go-simplejson"
+	"github.com/go-resty/resty/v2"
 )
 
 type APIClient struct {
@@ -98,11 +99,13 @@ func ERandPort() int {
 	return s[0]
 }
 func (c *APIClient) Init() error {
-	path := "/c"
+	path := "/api/SsInit"
 	res, err := c.client.R().Get(path)
 	if err != nil {
 		return err
 	}
+	mylog.Logf("data1:%v", res)
+
 	res_j, err := c.parseResponse(res, path, err)
 	//return nil
 	if err != nil {
@@ -131,7 +134,7 @@ func (c *APIClient) Init() error {
 }
 func (c *APIClient) GetUsers() (retc *UserRets, err error) {
 
-	path := "/g"
+	path := "/api/SsGetUsers"
 	retc = &UserRets{}
 	c.client.SetQueryParam("n", strconv.Itoa(*c.NodeID))
 
@@ -151,7 +154,7 @@ func (c *APIClient) AddWwwRepo(traffic WwwTraffic) {
 	}
 }
 func (c *APIClient) ReportSys() error {
-	path := "/p"
+	path := "/api/SsRepoSys"
 
 	data := utils.GetDeviceInfo()
 	dat, _ := json.Marshal(data)
