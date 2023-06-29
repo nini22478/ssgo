@@ -175,7 +175,7 @@ func (c *APIClient) ReportSys() error {
 	return nil
 }
 func (c *APIClient) ReportWwwTraffic(traffic *[]WwwTraffic) error {
-	path := "/i"
+	path := "/api/SsRepoWww"
 	//
 	data := []WwwTraffic{}
 
@@ -211,7 +211,7 @@ func (c *APIClient) AddRepo(utice *UserTraffic) {
 
 // ReportUserTraffic reports the user traffic
 func (c *APIClient) ReportUserTraffic(userTraffic *[]UserTraffic) error {
-	path := "/t"
+	path := "/api/SsRepoTice"
 	//
 	data := []UserTraffic{}
 	hdata := map[string]*UserTraffic{}
