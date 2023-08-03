@@ -209,7 +209,7 @@ func (s *SSServer) RepoSys() {
 	}
 }
 func (s *SSServer) CheckUser(sigHup chan os.Signal) {
-	ticker := time.NewTicker(300 * time.Second)
+	ticker := time.NewTicker(180 * time.Second)
 	hash := map[api.Key]uint32{}
 	// 在无限循环中接收信号并打印当前时间
 	for {
