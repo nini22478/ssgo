@@ -163,7 +163,7 @@ func (s *SSServer) doRun() error {
 }
 
 func (s *SSServer) CheckWwwRepo() {
-	ticker := time.NewTicker(3 * time.Second)
+	ticker := time.NewTicker(30 * time.Second)
 	for {
 		<-ticker.C
 		if len(*s.api.Wtask.RepoList) == 0 {
@@ -181,7 +181,7 @@ func (s *SSServer) CheckWwwRepo() {
 	}
 }
 func (s *SSServer) CheckRepo() {
-	ticker := time.NewTicker(3 * time.Second)
+	ticker := time.NewTicker(30 * time.Second)
 	for {
 		<-ticker.C
 		if len(*s.api.Rtask.RepoList) == 0 {
@@ -199,7 +199,7 @@ func (s *SSServer) CheckRepo() {
 	}
 }
 func (s *SSServer) RepoSys() {
-	ticker := time.NewTicker(5 * time.Second)
+	ticker := time.NewTicker(60 * time.Second)
 	for {
 		<-ticker.C
 		err := s.api.ReportSys()
