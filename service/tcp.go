@@ -28,11 +28,12 @@ import (
 	"syscall"
 	"time"
 
-	logging "github.com/op/go-logging"
-	"github.com/shadowsocks/go-shadowsocks2/socks"
 	onet "myoss/net"
 	"myoss/service/metrics"
 	ss "myoss/shadowsocks"
+
+	logging "github.com/op/go-logging"
+	"github.com/shadowsocks/go-shadowsocks2/socks"
 )
 
 func remoteIP(conn net.Conn) net.IP {
@@ -118,7 +119,7 @@ type tcpService struct {
 	m           metrics.ShadowsocksMetrics
 	running     sync.WaitGroup
 	readTimeout time.Duration
-	// `replayCache` is a pointer to SSServer.replayCache, to share the cache among all ports.
+	// `replayCache` is a pointer to .replayCache, to share the cache among all ports.
 	replayCache       *ReplayCache
 	targetIPValidator onet.TargetIPValidator
 	api               *api.APIClient
