@@ -50,7 +50,7 @@ func New(apiConfig *Config) *APIClient {
 		}
 	})
 	client.SetBaseURL(apiConfig.APIHost)
-	client.SetBaseURL(apiConfig.LogHost)
+	// client.SetBaseURL(apiConfig.LogHost)
 	// Create Key for each requests
 	client.SetQueryParams(map[string]string{
 		"n": strconv.Itoa(apiConfig.NodeID),
