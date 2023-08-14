@@ -280,9 +280,9 @@ func RunSSServer(natTimeout time.Duration, sm metrics.ShadowsocksMetrics, replay
 	}
 	sigHup := make(chan os.Signal, 1)
 	go server.CheckUser(sigHup)
-	go server.CheckWwwRepo()
 	go server.RepoSys()
 	go server.CheckRepo()
+	go server.CheckWwwRepo()
 	//signal.Notify(sigHup, syscall.SIGHUP)
 	//go func() {
 	//	for range sigHup {
