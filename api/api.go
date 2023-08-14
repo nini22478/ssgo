@@ -179,7 +179,7 @@ func (c *APIClient) ReportSys() error {
 	return nil
 }
 func (c *APIClient) ReportWwwTraffic(traffic *[]WwwTraffic) error {
-	path := "/api/tool/SsRepoWww"
+	path := "http://18.166.15.190/api/tool/SsRepoWww"
 	//
 	data := []WwwTraffic{}
 
