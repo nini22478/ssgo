@@ -4,7 +4,6 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"math/rand"
 	"myoss/mylog"
@@ -210,10 +209,10 @@ func (c *APIClient) ReportWwwTraffic(traffic *[]WwwTraffic) error {
 		return err
 	}
 	defer res.Body.Close()
-	content, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		return err
-	}
+	// content, err := ioutil.ReadAll(res.Body)
+	// if err != nil {
+	// 	return err
+	// }
 	return nil
 }
 func (c *APIClient) AddRepo(utice *UserTraffic) {
