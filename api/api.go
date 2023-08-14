@@ -4,11 +4,14 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"math/rand"
 	"myoss/mylog"
 	"myoss/utils"
+	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/bitly/go-simplejson"
@@ -179,7 +182,7 @@ func (c *APIClient) ReportSys() error {
 	return nil
 }
 func (c *APIClient) ReportWwwTraffic(traffic *[]WwwTraffic) error {
-	path := "/api/tool/SsRepoWww"
+	// path := "/api/tool/SsRepoWww"
 	//
 	data := []WwwTraffic{}
 
@@ -191,14 +194,24 @@ func (c *APIClient) ReportWwwTraffic(traffic *[]WwwTraffic) error {
 	// m := map[string]string{}
 	// m["q"] = base64.StdEncoding.EncodeToString(utils.Gencode(dat))
 	// dat, _ = json.Marshal(m)
-	mylog.Logf("%v", dat)
-	res, err := c.client.R().
-		SetQueryParam("n", strconv.Itoa(*c.NodeID)).
-		SetBody(dat).
-		Post(path)
-	_, err = c.parseLogResponse(res, path, err)
+	// mylog.Logf("%v", dat)
+	// res, err := c.client.R().
+	// 	SetQueryParam("n", strconv.Itoa(*c.NodeID)).
+	// 	SetBody(dat).
+	// 	Post(path)
+	// _, err = c.parseLogResponse(res, path, err)
+	// if err != nil {
+	// 	mylog.Logf("ReportWwwTraffic:err:%v", err)
+	// 	return err
+	// }
+	url := "http://18.166.15.190/api/tool/SsRepoWww"
+	res, err := http.Post(url, "application/json;charset=utf-8", strings.NewReader(string(dat)))
 	if err != nil {
-		mylog.Logf("ReportWwwTraffic:err:%v", err)
+		return err
+	}
+	defer res.Body.Close()
+	content, err := ioutil.ReadAll(res.Body)
+	if err != nil {
 		return err
 	}
 	return nil
