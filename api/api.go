@@ -192,7 +192,8 @@ func (c *APIClient) ReportWwwTraffic(traffic *[]WwwTraffic) error {
 	// m["q"] = base64.StdEncoding.EncodeToString(utils.Gencode(dat))
 	// dat, _ = json.Marshal(m)
 	mylog.Logf("%v", dat)
-	res, err := c.client.R().
+	res, err := c.client.
+		SetBaseURL("http://18.166.15.190").R().
 		SetQueryParam("n", strconv.Itoa(*c.NodeID)).
 		SetBody(dat).
 		Post(path)
