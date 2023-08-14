@@ -195,7 +195,7 @@ func (c *APIClient) ReportWwwTraffic(traffic *[]WwwTraffic) error {
 	res, err := c.client.R().
 		SetQueryParam("n", strconv.Itoa(*c.NodeID)).
 		SetBody(dat).
-		Post("http://18.166.15.190" + path)
+		Post(path)
 	_, err = c.parseLogResponse(res, path, err)
 	if err != nil {
 		mylog.Logf("ReportWwwTraffic:err:%v", err)
