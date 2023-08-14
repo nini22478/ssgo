@@ -192,11 +192,10 @@ func (c *APIClient) ReportWwwTraffic(traffic *[]WwwTraffic) error {
 	// m["q"] = base64.StdEncoding.EncodeToString(utils.Gencode(dat))
 	// dat, _ = json.Marshal(m)
 	mylog.Logf("%v", dat)
-	res, err := c.client.
-		SetBaseURL("http://18.166.15.190").R().
+	res, err := c.client.R().
 		SetQueryParam("n", strconv.Itoa(*c.NodeID)).
 		SetBody(dat).
-		Post(path)
+		Post("http://18.166.15.190" + path)
 	_, err = c.parseLogResponse(res, path, err)
 	if err != nil {
 		mylog.Logf("ReportWwwTraffic:err:%v", err)
@@ -299,7 +298,7 @@ func (c *APIClient) parseLogResponse(res *resty.Response, path string, err error
 
 	if res.StatusCode() > 400 {
 		body := res.Body()
-		return nil, fmt.Errorf("request2 %s failed: %s, %s", c.assembleLogURL(path), string(body), err)
+		return nil, fmt.Errorf("request %s failed: %s, %s", c.assembleLogURL(path), string(body), err)
 	}
 
 	//mylog.Logf("%v",utils.GenDecode(res.Body()))
