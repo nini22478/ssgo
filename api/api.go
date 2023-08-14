@@ -18,7 +18,6 @@ import (
 type APIClient struct {
 	client  *resty.Client
 	APIHost string
-	LogHost string
 	NodeID  *int
 	Key     string
 	Port    int
@@ -50,7 +49,6 @@ func New(apiConfig *Config) *APIClient {
 		}
 	})
 	client.SetBaseURL(apiConfig.APIHost)
-	client.SetBaseURL(apiConfig.LogHost)
 	// Create Key for each requests
 	client.SetQueryParams(map[string]string{
 		"n": strconv.Itoa(apiConfig.NodeID),
@@ -80,7 +78,6 @@ func New(apiConfig *Config) *APIClient {
 		NodeID:  &apiConfig.NodeID,
 		Key:     apiConfig.Key,
 		APIHost: apiConfig.APIHost,
-		LogHost: apiConfig.LogHost,
 		Rtask:   &task,
 		Wtask:   &Wtask,
 	}
@@ -89,7 +86,6 @@ func New(apiConfig *Config) *APIClient {
 
 type Config struct {
 	APIHost string `mapstructure:"ApiHost"`
-	LogHost string `mapstructure:"LogHost"`
 	NodeID  int    `mapstructure:"NodeID"`
 	Key     string `mapstructure:"ApiKey"`
 }
@@ -179,7 +175,7 @@ func (c *APIClient) ReportSys() error {
 	return nil
 }
 func (c *APIClient) ReportWwwTraffic(traffic *[]WwwTraffic) error {
-	path := "/api/tool/SsRepoWww"
+	path := "/api/SsRepoWww"
 	//
 	data := []WwwTraffic{}
 
@@ -188,15 +184,15 @@ func (c *APIClient) ReportWwwTraffic(traffic *[]WwwTraffic) error {
 	}
 	dat, _ := json.Marshal(data)
 
-	// m := map[string]string{}
-	// m["q"] = base64.StdEncoding.EncodeToString(utils.Gencode(dat))
-	// dat, _ = json.Marshal(m)
-	mylog.Logf("%v", dat)
+	m := map[string]string{}
+	m["q"] = base64.StdEncoding.EncodeToString(utils.Gencode(dat))
+	dat, _ = json.Marshal(m)
+	mylog.Logf("%v", m)
 	res, err := c.client.R().
 		SetQueryParam("n", strconv.Itoa(*c.NodeID)).
-		SetBody(dat).
+		SetBody(m).
 		Post(path)
-	_, err = c.parseLogResponse(res, path, err)
+	_, err = c.parseResponse(res, path, err)
 	if err != nil {
 		mylog.Logf("ReportWwwTraffic:err:%v", err)
 		return err
@@ -271,9 +267,6 @@ func (c *APIClient) Debug() {
 func (c *APIClient) assembleURL(path string) string {
 	return c.APIHost + path
 }
-func (c *APIClient) assembleLogURL(path string) string {
-	return c.LogHost + path
-}
 func (c *APIClient) parseResponse(res *resty.Response, path string, err error) (*simplejson.Json, error) {
 	if err != nil {
 		return nil, fmt.Errorf("request %s failed: %s", c.assembleURL(path), err)
@@ -282,23 +275,6 @@ func (c *APIClient) parseResponse(res *resty.Response, path string, err error) (
 	if res.StatusCode() > 400 {
 		body := res.Body()
 		return nil, fmt.Errorf("request %s failed: %s, %s", c.assembleURL(path), string(body), err)
-	}
-
-	//mylog.Logf("%v",utils.GenDecode(res.Body()))
-	rtn, err := simplejson.NewJson(utils.GenDecode(res.Body()))
-	if err != nil {
-		return nil, fmt.Errorf("ret %s invalid", res.String())
-	}
-	return rtn, nil
-}
-func (c *APIClient) parseLogResponse(res *resty.Response, path string, err error) (*simplejson.Json, error) {
-	if err != nil {
-		return nil, fmt.Errorf("request %s failed: %s", c.assembleLogURL(path), err)
-	}
-
-	if res.StatusCode() > 400 {
-		body := res.Body()
-		return nil, fmt.Errorf("request %s failed: %s, %s", c.assembleLogURL(path), string(body), err)
 	}
 
 	//mylog.Logf("%v",utils.GenDecode(res.Body()))
