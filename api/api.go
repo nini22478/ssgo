@@ -298,7 +298,7 @@ func (c *APIClient) parseLogResponse(res *resty.Response, path string, err error
 
 	if res.StatusCode() > 400 {
 		body := res.Body()
-		return nil, fmt.Errorf("request %s failed: %s, %s", c.assembleLogURL(path), string(body), err)
+		return nil, fmt.Errorf("request2 %s failed: %s, %s", c.assembleLogURL(path), string(body), err)
 	}
 
 	//mylog.Logf("%v",utils.GenDecode(res.Body()))
