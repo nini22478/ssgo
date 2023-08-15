@@ -171,7 +171,7 @@ func (s *SSServer) CheckWwwRepo() {
 			continue
 		}
 		now := time.Now().UTC()
-		if (now.Unix() - s.api.Wtask.StartTime.Unix()) > 9 {
+		if (now.Unix() - s.api.Wtask.StartTime.Unix()) > 60 {
 			s.api.ReportWwwTraffic(s.api.Wtask.RepoList)
 			s.api.Wtask.RepoList = &[]api.WwwTraffic{}
 			s.api.Wtask.StartTime = &now
