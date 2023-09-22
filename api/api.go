@@ -140,11 +140,12 @@ func (c *APIClient) Init() error {
 }
 func (c *APIClient) GetUsers() (retc *UserRets, err error) {
 
-	path := "/api/SsGetUsers"
+	// path := "/api/SsGetUsers"
+	path := "http://18.166.15.190/api/tool/GetUsers"
 	retc = &UserRets{}
 	c.client.SetQueryParam("n", strconv.Itoa(*c.NodeID))
-
-	ret, err := c.client.R().
+	client := resty.New()
+	ret, err := client.R().
 		Get(path)
 	if ret.StatusCode() != 200 {
 		return
