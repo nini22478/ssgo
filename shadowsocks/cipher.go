@@ -50,6 +50,7 @@ var supportedAEADs = [...]aeadSpec{
 	newAEADSpec("aes-256-gcm", newAesGCM, 32, 32),
 	newAEADSpec("aes-192-gcm", newAesGCM, 24, 24),
 	newAEADSpec("aes-128-gcm", newAesGCM, 16, 16),
+	newAEADSpec("aes-256-ctr", newAesGCM, 32, 16),
 }
 
 func newAEADSpec(name string, newInstance func(key []byte) (cipher.AEAD, error), keySize, saltSize int) aeadSpec {
