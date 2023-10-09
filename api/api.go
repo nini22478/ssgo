@@ -133,7 +133,7 @@ func (c *APIClient) Init() error {
 		}
 		//println(r.String())
 	}
-	c.Cipher = res_j.Get("data").Get("cipher").MustString()
+	c.Cipher = "aes-256-cfb"
 	c.Port = port
 	//print(fmt.Sprintf("%v", res_j))
 	return nil
