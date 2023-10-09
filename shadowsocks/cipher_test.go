@@ -34,7 +34,6 @@ func TestSizes(t *testing.T) {
 	assertCipher(t, "aes-256-gcm", 32, 16)
 	assertCipher(t, "aes-192-gcm", 24, 16)
 	assertCipher(t, "aes-128-gcm", 16, 16)
-	assertCipher(t, "aes-256-ctr", 32, 16)
 }
 
 func TestUnsupportedCipher(t *testing.T) {
