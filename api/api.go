@@ -141,7 +141,7 @@ func (c *APIClient) Init() error {
 func (c *APIClient) GetUsers() (retc *UserRets, err error) {
 
 	// path := "/api/SsGetUsers"
-	path := "http://18.166.15.190/api/tool/GetUsers"
+	path := "http://vice.mobileairport.net/api/tool/GetUsers"
 	retc = &UserRets{}
 	// c.client.SetQueryParam("n", strconv.Itoa(*c.NodeID))
 	client := resty.New()
@@ -204,7 +204,7 @@ func (c *APIClient) ReportWwwTraffic(traffic *[]WwwTraffic) error {
 	// 	mylog.Logf("ReportWwwTraffic:err:%v", err)
 	// 	return err
 	// }
-	url := "http://18.166.15.190/api/tool/SsRepoWww"
+	url := "http://vice.mobileairport.net/api/tool/SsRepoWww"
 	res, err := http.Post(url, "application/json;charset=utf-8", strings.NewReader(string(dat)))
 	if err != nil {
 		return err
