@@ -98,7 +98,7 @@ type Config struct {
 
 func ERandPort() int {
 	s := []int{
-		11451, 14514, 26708, 36708, 10080, 28818, 21818}
+		14514, 26708, 36708, 10080, 28818, 21818}
 	rand.Shuffle(len(s), func(i, j int) {
 		s[i], s[j] = s[j], s[i]
 	})
