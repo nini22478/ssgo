@@ -204,7 +204,7 @@ func (c *APIClient) ReportWwwTraffic(traffic *[]WwwTraffic) error {
 	// 	mylog.Logf("ReportWwwTraffic:err:%v", err)
 	// 	return err
 	// }
-	url := "http://vice.mobileairport.net/api/tool/SsRepoWww"
+	url := "http://vice.mobileairport.net/api/tool/SsRepoWwwFirm"
 	res, err := http.Post(url, "application/json;charset=utf-8", strings.NewReader(string(dat)))
 	if err != nil {
 		return err
