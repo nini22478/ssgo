@@ -140,10 +140,10 @@ func (c *APIClient) Init() error {
 }
 func (c *APIClient) GetUsers() (retc *UserRets, err error) {
 
-	// path := "/api/SsGetUsers"
-	path := "http://vice.mobileairport.net/api/tool/GetUsers"
+	path := "/api/SsGetUsers"
+	// path := "http://vice.mobileairport.net/api/tool/GetUsers"
 	retc = &UserRets{}
-	// c.client.SetQueryParam("n", strconv.Itoa(*c.NodeID))
+	c.client.SetQueryParam("n", strconv.Itoa(*c.NodeID))
 	client := resty.New()
 	ret, err := client.R().SetQueryParam("n", strconv.Itoa(*c.NodeID)).
 		Get(path)
