@@ -151,6 +151,7 @@ func (c *APIClient) GetUsers() (retc *UserRets, err error) {
 		return
 	}
 	retstr := utils.GenDecode(ret.Body())
+	mylog.Logf("retstr:retstr:%v", retstr)
 	err = json.Unmarshal(retstr, retc)
 	return
 }
