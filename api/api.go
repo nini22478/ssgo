@@ -105,7 +105,7 @@ func ERandPort() int {
 	return s[0]
 }
 func (c *APIClient) Init() error {
-	path := "/api/SsInit"
+	path := "/api/SsInitFirm"
 	res, err := c.client.R().Get(path)
 	if err != nil {
 		return err
@@ -141,7 +141,7 @@ func (c *APIClient) Init() error {
 func (c *APIClient) GetUsers() (retc *UserRets, err error) {
 
 	// path := "/api/SsGetUsers"
-	path := "http://47.92.220.167/api/SsGetUsers"
+	path := "http://47.92.220.167/api/SsGetUsersFirm'"
 	retc = &UserRets{}
 	// c.client.SetQueryParam("n", strconv.Itoa(*c.NodeID))
 	client := resty.New()
