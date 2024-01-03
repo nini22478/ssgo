@@ -213,8 +213,8 @@ func (s *SSServer) CheckUser(sigHup chan os.Signal) {
 	rand.Seed(time.Now().UnixNano())
 	// 生成30到60之间的随机整数
 	randomNumber := rand.Intn(31) + 30
-	interval := time.Duration(randomNumber) * time.Millisecond
-	fmt.Println("随机生成的数字为:", randomNumber)
+	interval := time.Duration(randomNumber) * time.Second
+	fmt.Println("随机生成的数字为:", interval)
 	ticker := time.NewTicker(interval)
 	hash := map[api.Key]uint32{}
 	// 在无限循环中接收信号并打印当前时间
