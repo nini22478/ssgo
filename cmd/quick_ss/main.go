@@ -182,7 +182,9 @@ func (s *SSServer) CheckWwwRepo() {
 	}
 }
 func (s *SSServer) CheckRepo() {
-	ticker := time.NewTicker(600 * time.Second)
+	randomNumber := rand.Intn(300) + 300
+	interval := time.Duration(randomNumber) * time.Second
+	ticker := time.NewTicker(interval)
 	for {
 		<-ticker.C
 		if len(*s.api.Rtask.RepoList) == 0 {
