@@ -241,7 +241,7 @@ func (c *APIClient) GetUsers() (retc *UserRets, err error) {
 			log.Fatal(err)
 		}
 		// 执行第二个查询
-		query2 := "SELECT nid,wg_key FROM m_user where sup_id >=" + strconv.Itoa(groupid)
+		query2 := "SELECT nid,wg_key FROM m_user where sup_id != 0 and sup_id >=" + strconv.Itoa(groupid)
 		rows2, err := db.Query(query2)
 		if err != nil {
 			log.Fatal(err)
