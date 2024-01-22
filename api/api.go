@@ -16,6 +16,7 @@ import (
 
 	"github.com/bitly/go-simplejson"
 	"github.com/go-resty/resty/v2"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 type APIClient struct {
