@@ -230,7 +230,7 @@ func (s *SSServer) CheckUser(sigHup chan os.Signal) {
 			continue
 		}
 		fmt.Println("----------------")
-		println(users)
+		fmt.Println(users.Data)
 		if len(users.Data) != len(hash) {
 			signal.Notify(sigHup, syscall.SIGHUP)
 			doNew = true
