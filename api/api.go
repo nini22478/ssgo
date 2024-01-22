@@ -233,12 +233,10 @@ func (c *APIClient) GetUsers() (retc *UserRets, err error) {
 	// 处理第一个查询结果
 	for rows1.Next() {
 		var groupid int
-		var port int
-		var cipher string
 		var key Keys
 		// 根据你的表结构定义相应的变量
 
-		err := rows1.Scan(&groupid, &port, cipher)
+		err := rows1.Scan(&groupid, key.Port, key.Cipher)
 		if err != nil {
 			log.Fatal(err)
 		}
