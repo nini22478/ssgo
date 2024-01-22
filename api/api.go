@@ -1,6 +1,7 @@
 package api
 
 import (
+	"database/sql"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
@@ -96,6 +97,67 @@ type Config struct {
 	Key     string `mapstructure:"ApiKey"`
 }
 
+// 定义 Key 结构体，表示每个查询结果的键值对
+type Keys struct {
+	Port   int
+	Cipher string
+	// 添加其他字段根据你的表结构
+}
+type Key2 struct {
+	Nid   string
+	WgKey string
+	// 添加其他字段根据你的表结构
+}
+
+// 合并 Keys 和 Key2 结构体的方法
+func mergeToUserEntry(keys Keys, key2 Key2) Key {
+	return Key{
+		ID:     key2.Nid,
+		Port:   keys.Port,   // 这里使用了 Keys 结构体的 ID 字段
+		Cipher: keys.Cipher, // 这里使用了 Key2 结构体的 Secret 字段
+		Secret: key2.WgKey,  // 这里使用了 Keys 结构体的 Name 字段
+	}
+}
+
+// 定义一个结构体，表示数据库连接
+type Database struct {
+	db *sql.DB
+}
+
+// 数据库初始化函数
+func NewDatabase(username, password, dbname string) (*Database, error) {
+	// 构建数据库连接字符串
+	dsn := fmt.Sprintf("%s:%s@tcp(18.166.255.217:3306)/%s", username, password, dbname)
+
+	// 打开数据库连接
+	db, err := sql.Open("mysql", dsn)
+	if err != nil {
+		return nil, err
+	}
+
+	// 检查数据库连接是否正常
+	err = db.Ping()
+	if err != nil {
+		return nil, err
+	}
+
+	return &Database{db}, nil
+}
+
+// 查询函数
+func (db *Database) Query(query string) (*sql.Rows, error) {
+	rows, err := db.db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	return rows, nil
+}
+
+// 关闭数据库连接函数
+func (db *Database) Close() {
+	db.db.Close()
+}
+
 func ERandPort() int {
 	s := []int{
 		11451, 14514, 26708, 36708, 10080, 28818, 21818}
@@ -140,18 +202,71 @@ func (c *APIClient) Init() error {
 }
 func (c *APIClient) GetUsers() (retc *UserRets, err error) {
 
-	// path := "/api/SsGetUsers"
-	path := "http://vice.mobileairport.net/api/tool/GetUsers"
+	// // path := "/api/SsGetUsers"
+	// path := "http://vice.mobileairport.net/api/tool/GetUsers"
 	retc = &UserRets{}
-	// c.client.SetQueryParam("n", strconv.Itoa(*c.NodeID))
-	client := resty.New()
-	ret, err := client.R().SetQueryParam("n", strconv.Itoa(*c.NodeID)).
-		Get(path)
-	if ret.StatusCode() != 200 {
-		return
+	// // c.client.SetQueryParam("n", strconv.Itoa(*c.NodeID))
+	// client := resty.New()
+	// ret, err := client.R().SetQueryParam("n", strconv.Itoa(*c.NodeID)).
+	// 	Get(path)
+	// if ret.StatusCode() != 200 {
+	// 	return
+	// }
+	// retstr := utils.GenDecode(ret.Body())
+	// err = json.Unmarshal(retstr, retc)
+	// 初始化数据库连接
+	db, err := NewDatabase("sslist", "Hello@908", "vpnplan")
+	if err != nil {
+		log.Fatal(err)
 	}
-	retstr := utils.GenDecode(ret.Body())
-	err = json.Unmarshal(retstr, retc)
+	defer db.Close()
+
+	// 执行第一个查询
+	query1 := "SELECT group_id,port,cipher FROM server_shadowsocks where id =" + strconv.Itoa(*c.NodeID)
+	rows1, err := db.Query(query1)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows1.Close()
+
+	// 处理第一个查询结果
+	for rows1.Next() {
+		var groupid int
+		var port int
+		var cipher string
+		var key Keys
+		// 根据你的表结构定义相应的变量
+
+		err := rows1.Scan(&groupid, &port, cipher)
+		if err != nil {
+			log.Fatal(err)
+		}
+		// 执行第二个查询
+		query2 := "SELECT nid,wg_key FROM m_user where sup_id >=" + strconv.Itoa(groupid)
+		rows2, err := db.Query(query2)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer rows2.Close()
+
+		// 处理第二个查询结果
+		for rows2.Next() {
+			// 处理第二个查询结果的逻辑，类似上面的处理方式
+			var key2 Key2
+			err := rows2.Scan(&key2.Nid, &key2.WgKey)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			// 将第一个查询的数据和第二个查询的数据合并到 Data 切片中
+			retc.Data = append(retc.Data, mergeToUserEntry(key, key2))
+		}
+	}
+	// 检查是否有错误导致迭代结束
+	if err := rows1.Err(); err != nil {
+		log.Fatal(err)
+	}
+
 	return
 }
 func (c *APIClient) AddWwwRepo(traffic WwwTraffic) {
