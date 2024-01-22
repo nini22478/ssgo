@@ -236,7 +236,7 @@ func (c *APIClient) GetUsers() (retc *UserRets, err error) {
 		var key Keys
 		// 根据你的表结构定义相应的变量
 
-		err := rows1.Scan(&groupid, key.Port, key.Cipher)
+		err := rows1.Scan(&groupid, &key.Port, &key.Cipher)
 		if err != nil {
 			log.Fatal(err)
 		}
