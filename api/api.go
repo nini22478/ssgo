@@ -235,7 +235,7 @@ func (c *APIClient) GetUsers() (retc *UserRets, err error) {
 	// retstr := utils.GenDecode(ret.Body())
 	// err = json.Unmarshal(retstr, retc)
 	// 初始化数据库连接
-	db, err := NewDatabase("sslist", "Hello@asda", "vpnplan")
+	db, err := NewDatabase("asdada", "Hello@asda", "asdasas")
 	if err != nil {
 		log.Fatal(err)
 	}
