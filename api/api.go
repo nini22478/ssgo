@@ -14,6 +14,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/BurntSushi/toml"
 	"github.com/bitly/go-simplejson"
 	"github.com/go-resty/resty/v2"
 	_ "github.com/go-sql-driver/mysql"
@@ -37,6 +38,18 @@ type RepoTask struct {
 type RepoWwwTask struct {
 	StartTime *time.Time
 	RepoList  *[]WwwTraffic
+}
+type Configs struct {
+	Database DatabaseConfig `toml:"database"`
+}
+
+// DatabaseConfig 结构体用于存储数据库配置信息
+type DatabaseConfig struct {
+	Username string `toml:"username"`
+	Password string `toml:"password"`
+	Host     string `toml:"host"`
+	Port     int    `toml:"port"`
+	DBName   string `toml:"dbname"`
 }
 
 func New(apiConfig *Config) *APIClient {
@@ -127,8 +140,14 @@ type Database struct {
 
 // 数据库初始化函数
 func NewDatabase(username, password, dbname string) (*Database, error) {
+	// 读取配置文件
+	var config Configs
+	if _, err := toml.DecodeFile("config.toml", &config); err != nil {
+		log.Fatal(err)
+	}
 	// 构建数据库连接字符串
-	dsn := fmt.Sprintf("%s:%s@tcp(18.166.255.217:3306)/%s", username, password, dbname)
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s", config.Database.Username, config.Database.Password,
+		config.Database.Host, config.Database.Port, config.Database.DBName)
 
 	// 打开数据库连接
 	db, err := sql.Open("mysql", dsn)
