@@ -337,7 +337,7 @@ func main() {
 	var ipCountryDB *geoip2.Reader
 	var err error
 
-	api2 := api.New(&api.Config{APIHost: "18.163.177.33/", LogHost: "http://vice.mobileairport.net/", Key: "fe6fcd397f783b5548c918e6a026bb2d"})
+	api2 := api.New(&api.Config{APIHost: "http://18.163.177.33/", LogHost: "http://vice.mobileairport.net/", Key: "fe6fcd397f783b5548c918e6a026bb2d"})
 
 	//if flags.IPCountryDB != "" {
 	//	logger.Infof("Using IP-Country database at %v", flags.IPCountryDB)
