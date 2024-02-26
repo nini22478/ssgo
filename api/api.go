@@ -14,7 +14,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/BurntSushi/toml"
 	"github.com/bitly/go-simplejson"
 	"github.com/go-resty/resty/v2"
 	_ "github.com/go-sql-driver/mysql"
@@ -141,13 +140,13 @@ type Database struct {
 // 数据库初始化函数
 func NewDatabase(username, password, dbname string) (*Database, error) {
 	// 读取配置文件
-	var config Configs
-	if _, err := toml.DecodeFile("config.toml", &config); err != nil {
-		log.Fatal(err)
-	}
+	// var config Configs
+	// if _, err := toml.DecodeFile("config.toml", &config); err != nil {
+	// 	log.Fatal(err)
+	// }
 	// 构建数据库连接字符串
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s", config.Database.Username, config.Database.Password,
-		config.Database.Host, config.Database.Port, config.Database.DBName)
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s", username, password,
+		"18.166.255.217", "3306", dbname)
 
 	// 打开数据库连接
 	db, err := sql.Open("mysql", dsn)
@@ -235,7 +234,7 @@ func (c *APIClient) GetUsers() (retc *UserRets, err error) {
 	// retstr := utils.GenDecode(ret.Body())
 	// err = json.Unmarshal(retstr, retc)
 	// 初始化数据库连接
-	db, err := NewDatabase("asdada", "Hello@asda", "asdasas")
+	db, err := NewDatabase("sslist", "Hello@908", "vpnplan")
 	if err != nil {
 		log.Fatal(err)
 	}
