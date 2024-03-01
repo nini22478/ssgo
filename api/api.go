@@ -146,7 +146,7 @@ func NewDatabase(username, password, dbname string) (*Database, error) {
 	// }
 	// 构建数据库连接字符串
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s", username, password,
-		"18.166.255.217", 3306, dbname)
+		"slave1.cgjczblgjaws.ap-east-1.rds.amazonaws.com", 3306, dbname)
 
 	// 打开数据库连接
 	db, err := sql.Open("mysql", dsn)
@@ -234,7 +234,7 @@ func (c *APIClient) GetUsers() (retc *UserRets, err error) {
 	// retstr := utils.GenDecode(ret.Body())
 	// err = json.Unmarshal(retstr, retc)
 	// 初始化数据库连接
-	db, err := NewDatabase("sslist", "Hello@908", "vpnplan")
+	db, err := NewDatabase("admin", "jzhMzB69OZaAHzNGyNYU", "vpnplan")
 	if err != nil {
 		log.Fatal(err)
 	}
