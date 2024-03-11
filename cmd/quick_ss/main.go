@@ -214,7 +214,7 @@ func (s *SSServer) RepoSys() {
 func (s *SSServer) CheckUser(sigHup chan os.Signal) {
 	rand.Seed(time.Now().UnixNano())
 	// 生成30到60之间的随机整数rand.Intn(10) + 30
-	randomNumber := 10
+	randomNumber := 5
 	interval := time.Duration(randomNumber) * time.Second
 	fmt.Println("随机生成的数字为:", interval)
 	ticker := time.NewTicker(interval)
