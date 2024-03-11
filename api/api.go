@@ -191,19 +191,19 @@ func (c *APIClient) Init() error {
 	if err != nil {
 		return err
 	}
-	mylog.Logf("data1:%v", res)
+	//mylog.Logf("data1:%v", res)
 
 	res_j, err := c.parseResponse(res, path, err)
 	//return nil
 	if err != nil {
 		return err
 	}
-	mylog.Logf("data:%v", res_j.Get("data"))
+	//mylog.Logf("data:%v", res_j.Get("data"))
 	port_str, err := res_j.Get("data").Get("port").String()
 	nid := res_j.Get("data").Get("id").MustInt()
 	c.NodeID = &nid
 	port := utils.Str2Int(port_str)
-	mylog.Logf("port:%v\n%v", port, err)
+	//mylog.Logf("port:%v\n%v", port, err)
 	if port == 0 {
 		port = ERandPort()
 		c.client.SetQueryParam("n", strconv.Itoa(nid))
@@ -301,7 +301,7 @@ func (c *APIClient) ReportSys() error {
 	m := map[string]string{}
 	m["q"] = base64.StdEncoding.EncodeToString(utils.Gencode(dat))
 	dat, _ = json.Marshal(m)
-	mylog.Logf("%v", m)
+	//mylog.Logf("%v", m)
 	res, err := c.client.R().
 		SetQueryParam("n", strconv.Itoa(*c.NodeID)).
 		SetBody(m).
@@ -372,8 +372,8 @@ func (c *APIClient) ReportUserTraffic(userTraffic *[]UserTraffic) error {
 				U:   traffic.U,
 				D:   traffic.D}
 		} else {
-			mylog.Logf("up:%v,down:%v", traffic.U, traffic.D)
-			mylog.Logf("up2:%v", o)
+			//mylog.Logf("up:%v,down:%v", traffic.U, traffic.D)
+			//mylog.Logf("up2:%v", o)
 
 			if traffic.D != 0 {
 				o.D += traffic.D
@@ -386,10 +386,10 @@ func (c *APIClient) ReportUserTraffic(userTraffic *[]UserTraffic) error {
 		}
 
 	}
-	mylog.Logf("up1:%v", hdata)
+	//mylog.Logf("up1:%v", hdata)
 
 	for _, tc := range hdata {
-		mylog.Logf("up3:%v", tc)
+		//mylog.Logf("up3:%v", tc)
 
 		data = append(data, *tc)
 	}
