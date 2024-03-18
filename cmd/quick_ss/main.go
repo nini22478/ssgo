@@ -157,9 +157,10 @@ func (s *SSServer) doRun() error {
 	}
 	for portNum, cipherList := range portCiphers {
 		s.ports[portNum].cipherList.Update(cipherList)
-		mylog.Logf("%v", s.ports[portNum])
 	}
 	logger.Infof("Loaded %v access keys", len(users.Data))
+	mylog.Logf("%#v", s.ports)
+
 	s.m.SetNumAccessKeys(len(users.Data), len(portCiphers))
 	return nil
 }
