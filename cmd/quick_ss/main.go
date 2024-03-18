@@ -98,17 +98,18 @@ func (s *SSServer) removePort(portNum int) error {
 	return nil
 }
 
-func (s *SSServer) doRun() error {
+func (s *SSServer) doRun(users *api.UserRets) error {
 	logger.Infof("doRun")
 
 	//config, err := readConfig(filename)
 	//if err != nil {
 	//	return fmt.Errorf("Failed to read config file %v: %v", filename, err)
 	//}
-	users, err := s.api.GetUsers()
-	if err != nil {
-		return err
-	}
+
+	// users, err := s.api.GetUsers()
+	// if err != nil {
+	// 	return err
+	// }
 	//keys := []Key{}
 	//keys = append(keys, Key{
 	//	ID:     "user-0",
@@ -159,8 +160,6 @@ func (s *SSServer) doRun() error {
 		s.ports[portNum].cipherList.Update(cipherList)
 	}
 	logger.Infof("Loaded %v access keys", len(users.Data))
-	mylog.Logf("%#v", s.ports)
-
 	s.m.SetNumAccessKeys(len(users.Data), len(portCiphers))
 	return nil
 }
@@ -257,7 +256,7 @@ func (s *SSServer) CheckUser(sigHup chan os.Signal) {
 			hash[ok] = hashkey
 		}
 		if doNew {
-			s.doRun()
+			s.doRun(users)
 		}
 
 	}
@@ -285,7 +284,11 @@ func RunSSServer(natTimeout time.Duration, sm metrics.ShadowsocksMetrics, replay
 	}
 	//err := server.loadConfig(filename)
 	server.api.Init()
-	err := server.doRun()
+	users, err := server.api.GetUsers()
+	// if err != nil {
+	// 	return err
+	// }
+	err = server.doRun(users)
 	if err != nil {
 		return nil, fmt.Errorf("Failed to dorun: %v", err)
 	}
