@@ -119,6 +119,8 @@ type Keys struct {
 type Key2 struct {
 	Nid   string
 	WgKey string
+	Port  int
+
 	// 添加其他字段根据你的表结构
 }
 
@@ -126,7 +128,7 @@ type Key2 struct {
 func mergeToUserEntry(keys Keys, key2 Key2) Key {
 	return Key{
 		ID:     key2.Nid,
-		Port:   keys.Port,   // 这里使用了 Keys 结构体的 ID 字段
+		Port:   key2.Port,   // 这里使用了 Keys 结构体的 ID 字段
 		Cipher: keys.Cipher, // 这里使用了 Key2 结构体的 Secret 字段
 		Secret: key2.WgKey,  // 这里使用了 Keys 结构体的 Name 字段
 	}
@@ -241,7 +243,7 @@ func (c *APIClient) GetUsers() (retc *UserRets, err error) {
 	defer db.Close()
 
 	// 执行第一个查询
-	query1 := "SELECT group_id,port,cipher FROM server_shadowsocks where id =" + strconv.Itoa(*c.NodeID)
+	query1 := "SELECT group_id,port as conn_port,cipher FROM server_shadowsocks where id =" + strconv.Itoa(*c.NodeID)
 	rows1, err := db.Query(query1)
 	if err != nil {
 		log.Fatal(err)
@@ -259,7 +261,8 @@ func (c *APIClient) GetUsers() (retc *UserRets, err error) {
 			log.Fatal(err)
 		}
 		// 执行第二个查询
-		query2 := "SELECT nid,wg_key FROM m_user where sup_id != 0 and sup_id >=" + strconv.Itoa(groupid)
+		//todo port 映射为实际字段
+		query2 := "SELECT nid,wg_key,conn_port as port FROM m_user_ext where sup_id != 0 and sup_id >=" + strconv.Itoa(groupid)
 		rows2, err := db.Query(query2)
 		if err != nil {
 			log.Fatal(err)
@@ -270,7 +273,7 @@ func (c *APIClient) GetUsers() (retc *UserRets, err error) {
 		for rows2.Next() {
 			// 处理第二个查询结果的逻辑，类似上面的处理方式
 			var key2 Key2
-			err := rows2.Scan(&key2.Nid, &key2.WgKey)
+			err := rows2.Scan(&key2.Nid, &key2.WgKey, &key2.Port)
 			if err != nil {
 				log.Fatal(err)
 			}
